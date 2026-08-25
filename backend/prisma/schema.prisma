@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. ECZANE (TENANT) TABLOSU
+// Sistemdeki her bir eczaneyi temsil eder. SaaS mimarisinin merkezidir.
+model Pharmacy {
+  id          String   @id @default(uuid())
+  name        String   // Örn: Güneş Eczanesi
+  taxNumber   String?  // Vergi No
+  country     String   @default("TR") // TR (Türkiye) veya DE (Almanya) entegrasyonlarını belirler
+  
+  users       User[]
+  stocks      Stock[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 2. KULLANICI (USER) TABLOSU
+// Eczacı, Kalfa veya diğer çalışanlar.
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String   // Hashed (Şifrelenmiş)
+  firstName   String
+  lastName    String
+  role        Role     @default(STAFF)
+  
+  pharmacyId  String
+  pharmacy    Pharmacy @relation(fields: [pharmacyId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  OWNER    // Eczacı (Tüm yetkiler, finansal raporlar vs.)
+  MANAGER  // Sorumlu Kalfa (Stok girişi, sipariş verebilir)
+  STAFF    // Kalfa (Sadece satış yapabilir)
+}
+
+// 3. MERKEZİ İLAÇ/ÜRÜN KATALOĞU
+// Tüm eczanelerin ortak kullandığı ana ürün havuzu (Barkod, İsim vs.)
+model Product {
+  id          String   @id @default(uuid())
+  barcode     String   @unique // İlaç barkodu
+  name        String   // Örn: Parol 500mg Tablet
+  activeIngr  String?  // Etken Madde (Almanya e-Rezept aramaları için önemli)
+  
+  stocks      Stock[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 4. ECZANEYE ÖZEL STOK VE MİAD (SON KULLANMA TARİHİ) TAKİBİ
+model Stock {
+  id          String   @id @default(uuid())
+  pharmacyId  String
+  productId   String
+  quantity    Int      @default(0)
+  expiryDate  DateTime // Miad takibi (Eczanelerin en büyük ceza yediği konu)
+  
+  pharmacy    Pharmacy @relation(fields: [pharmacyId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Aynı eczanede, aynı ilacın, aynı son kullanma tarihli stokları birleşsin
+  @@unique([pharmacyId, productId, expiryDate])
+}
