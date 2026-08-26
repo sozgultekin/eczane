@@ -76,3 +76,38 @@ model Stock {
   // Aynı eczanede, aynı ilacın, aynı son kullanma tarihli stokları birleşsin
   @@unique([pharmacyId, productId, expiryDate])
 }
+
+
+// 5. HASTA (PATIENT) VE CRM MODÜLÜ
+model Patient {
+  id          String   @id @default(uuid())
+  pharmacyId  String
+  tcNumber    String?  @unique // TR İçin TCKN, DE için Sigorta No
+  firstName   String
+  lastName    String
+  phone       String?
+  email       String?
+  birthDate   DateTime?
+  
+  prescriptions Prescription[]
+  
+  pharmacy    Pharmacy @relation(fields: [pharmacyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 6. HASTA REÇETE VE İLAÇ TAKİBİ
+model Prescription {
+  id          String   @id @default(uuid())
+  patientId   String
+  productId   String   // Hangi ilacı kullanıyor
+  directions  String?  // Örn: Günde 2 tok karnına
+  refillCount Int      @default(0) // Kaç kez daha yenilenebilir (Kronik raporlular için)
+  expiresAt   DateTime? // Reçete bitiş tarihi
+  
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
