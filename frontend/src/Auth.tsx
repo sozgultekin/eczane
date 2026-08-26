@@ -10,7 +10,7 @@ export default function Auth() {
           <h2 className="text-3xl font-bold text-gray-900">
             {isLogin ? 'Eczaneme Giriş Yap' : 'Yeni Eczane Kaydı'}
           </h2>
-          <p className="text-gray-500 mt-2">EBYS - Yeni Nesil Eczane Sistemi</p>
+          <p className="text-gray-500 mt-2">PharmSync - Yeni Nesil Sağlık Ekosistemi</p>
         </div>
 
         <form className="space-y-4">
