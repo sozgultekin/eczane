@@ -111,3 +111,30 @@ model Prescription {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+
+// 7. İLAÇ MÜMESSİLİ VE DEPO (MEDICAL REP/SUPPLIER)
+model MedicalRep {
+  id          String   @id @default(uuid())
+  companyName String   // Örn: Bayer, Novartis, Selçuk Ecza vb.
+  repName     String   // Mümessil Adı
+  email       String   @unique
+  phone       String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 8. BİLDİRİMLER (SMS, WhatsApp, Push Notification)
+model Notification {
+  id          String   @id @default(uuid())
+  type        String   // SMS, WHATSAPP, PUSH, SYSTEM
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  
+  patientId   String?  // Eğer hastaya gidiyorsa (Ahmet amca)
+  pharmacyId  String?  // Eğer eczaneye gidiyorsa (Mümessilden gelen kampanya)
+  
+  createdAt   DateTime @default(now())
+}
