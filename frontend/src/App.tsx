@@ -4,6 +4,7 @@ import Dashboard from './Dashboard'
 import Inventory from './Inventory'
 import Pos from './Pos'
 import Patients from './Patients'
+import Store from './Store'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true); 
@@ -21,7 +22,7 @@ function App() {
         {/* Basit daraltılmış sidebar (Sadece geri dönmek için) */}
         <aside className="w-16 bg-slate-800 flex flex-col items-center py-4">
            <button onClick={() => setActiveTab('dashboard')} className="w-10 h-10 bg-slate-700 text-white rounded-lg flex items-center justify-center hover:bg-slate-600 mb-4" title="Geri Dön">
-             ⬅️
+             🏠
            </button>
         </aside>
         <Pos />
@@ -40,13 +41,13 @@ function App() {
         <nav className="flex-1 p-4 space-y-2">
           <button 
             onClick={() => setActiveTab('dashboard')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition \${activeTab === 'dashboard' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'dashboard' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
           >
             📊 Dashboard
           </button>
           <button 
             onClick={() => setActiveTab('inventory')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition \${activeTab === 'inventory' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'inventory' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
           >
             📦 Stok ve Miad
           </button>
@@ -58,9 +59,15 @@ function App() {
           </button>
           <button 
             onClick={() => setActiveTab('patients')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition \${activeTab === 'patients' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'patients' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
           >
             👥 Hastalar (CRM)
+          </button>
+          <button 
+            onClick={() => setActiveTab('store')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'store' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+          >
+            🛍️ E-Ticaret (OTC)
           </button>
         </nav>
       </aside>
@@ -69,6 +76,7 @@ function App() {
       {activeTab === 'dashboard' && <Dashboard />}
       {activeTab === 'inventory' && <Inventory />}
       {activeTab === 'patients' && <Patients />}
+      {activeTab === 'store' && <Store />}
     </div>
   )
 }
