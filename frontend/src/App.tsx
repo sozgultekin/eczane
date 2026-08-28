@@ -5,6 +5,7 @@ import Inventory from './Inventory'
 import Pos from './Pos'
 import Patients from './Patients'
 import Store from './Store'
+import EPrescription from './EPrescription'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true); 
@@ -46,6 +47,12 @@ function App() {
             📊 Dashboard
           </button>
           <button 
+            onClick={() => setActiveTab('eprescription')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'eprescription' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+          >
+            🩺 E-Reçete (Doktor)
+          </button>
+          <button 
             onClick={() => setActiveTab('inventory')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition ${activeTab === 'inventory' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
           >
@@ -74,6 +81,7 @@ function App() {
 
       {/* Main Content Area */}
       {activeTab === 'dashboard' && <Dashboard />}
+      {activeTab === 'eprescription' && <EPrescription />}
       {activeTab === 'inventory' && <Inventory />}
       {activeTab === 'patients' && <Patients />}
       {activeTab === 'store' && <Store />}
